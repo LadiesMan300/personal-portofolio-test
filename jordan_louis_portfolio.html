@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS (Starter Template 5.0.2) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts: Teko, Rajdhani & Inter for a sleek, modern cyber-brutalist look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+
+    <title>Jordan Louis | Portfolio</title>
+
+    <style>
+      :root {
+        --bg-obsidian: #070709;
+        --bg-panel: #0e1015;
+        --bg-panel-alt: #13161f;
+        --ki-crimson: #ff3e00;
+        --ki-orange: #ff9900;
+        --ki-gold: #ffd000;
+        --neon-cyan: #00f0ff;
+        --text-light: #f8fafc;
+        --text-dim: #94a3b8;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-obsidian);
+        color: var(--text-light);
+        overflow-x: hidden;
+        position: relative;
+        /* Subtle carbon-fiber / tactical grid background */
+        background-image: 
+          radial-gradient(circle at 50% 10%, rgba(255, 62, 0, 0.14), transparent 55%),
+          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 100% 100%, 36px 36px, 36px 36px;
+      }
+
+      /* Live Ki Energy Canvas */
+      #kiCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      /* Ensure main content sits above canvas */
+      nav, section, footer {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Heavy Badass Display Fonts */
+      h1, h2, h3, .display-font {
+        font-family: 'Teko', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+      }
+
+      .hud-font {
+        font-family: 'Rajdhani', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #070709;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, var(--ki-crimson), var(--ki-gold));
+        border-radius: 2px;
+      }
+
+      /* ==================== NAVBAR ==================== */
+      .navbar {
+        background: rgba(7, 7, 9, 0.88) !important;
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(255, 62, 0, 0.35);
+        box-shadow: 0 4px 30px rgba(255, 62, 0, 0.12);
+      }
+
+      .navbar-brand {
+        font-family: 'Teko', sans-serif;
+        font-size: 2rem;
+        letter-spacing: 2px;
+        color: #fff !important;
+      }
+
+      .navbar-brand span {
+        color: var(--ki-crimson);
+        text-shadow: 0 0 12px rgba(255, 62, 0, 0.8);
+      }
+
+      .nav-link {
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #cbd5e1 !important;
+        position: relative;
+        transition: all 0.25s ease;
+      }
+
+      .nav-link:hover, .nav-link:focus {
+        color: var(--ki-gold) !important;
+        text-shadow: 0 0 10px rgba(255, 208, 0, 0.7);
+      }
+
+      /* ==================== HERO SECTION ==================== */
+      #hero {
+        min-height: 92vh;
+        display: flex;
+        align-items: center;
+        padding: 5.5rem 0 4rem;
+      }
+
+      .scouter-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 62, 0, 0.14);
+        border: 1px solid var(--ki-crimson);
+        border-left: 4px solid var(--ki-gold);
+        color: var(--ki-gold);
+        padding: 0.45rem 1.1rem;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        clip-path: polygon(0 0, 100% 0, 96% 100%, 0% 100%);
+        box-shadow: 0 0 20px rgba(255, 62, 0, 0.25);
+      }
+
+      .hero-title {
+        font-size: clamp(3.6rem, 8vw, 6.2rem);
+        line-height: 0.92;
+        text-shadow: 0 0 30px rgba(255, 62, 0, 0.35);
+      }
+
+      .text-ki-gradient {
+        background: linear-gradient(90deg, #ff3e00 0%, #ff9900 55%, #ffd000 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      /* Angled Cyber-Saiyan Portrait Frame */
+      .portrait-hud-frame {
+        position: relative;
+        width: 320px;
+        height: 370px;
+        margin: 0 auto;
+        padding: 6px;
+        background: linear-gradient(135deg, var(--ki-crimson), var(--ki-gold), var(--ki-crimson));
+        clip-path: polygon(12% 0, 100% 0, 100% 88%, 88% 100%, 0 100%, 0 12%);
+        box-shadow: 0 0 45px rgba(255, 62, 0, 0.4);
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+        animation: auraPulse 3.5s infinite alternate ease-in-out;
+      }
+
+      .portrait-hud-frame:hover {
+        transform: scale(1.03) translateY(-4px);
+      }
+
+      @keyframes auraPulse {
+        0% {
+          filter: drop-shadow(0 0 12px rgba(255, 62, 0, 0.55));
+        }
+        100% {
+          filter: drop-shadow(0 0 28px rgba(255, 208, 0, 0.85));
+        }
+      }
+
+      .portrait-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, #1e2230 0%, #090b10 100%);
+        clip-path: polygon(12% 0, 100% 0, 100% 88%, 88% 100%, 0 100%, 0 12%);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Fallback silhouette background when img src="" is blank */
+      .portrait-inner::before {
+        content: "\F4D7"; /* Bootstrap icon person */
+        font-family: "bootstrap-icons";
+        position: absolute;
+        font-size: 5.5rem;
+        color: rgba(255, 255, 255, 0.08);
+        z-index: 0;
+      }
+
+      .portrait-inner::after {
+        content: "PORTRAIT PLACEHOLDER";
+        position: absolute;
+        bottom: 36px;
+        left: 15px;
+        right: 15px;
+        text-align: center;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 2.5px;
+        color: rgba(255, 255, 255, 0.35);
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .hero-portrait {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* Hide broken image icon when src="" is empty so the HUD backdrop looks intentional and badass */
+      .hero-portrait[src=""] {
+        opacity: 0;
+      }
+
+      .scouter-overlay-badge {
+        position: absolute;
+        bottom: -14px;
+        right: -10px;
+        background: #070709;
+        border: 2px solid var(--ki-gold);
+        color: var(--ki-gold);
+        padding: 0.4rem 1rem;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        z-index: 4;
+        box-shadow: 0 0 20px rgba(255, 208, 0, 0.45);
+      }
+
+      /* ==================== CYBER / KI BUTTONS ==================== */
+      .btn-ki-primary {
+        background: linear-gradient(90deg, var(--ki-crimson), var(--ki-orange));
+        color: #fff;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0.85rem 2rem;
+        border: none;
+        clip-path: polygon(8% 0, 100% 0, 92% 100%, 0% 100%);
+        transition: all 0.25s ease;
+        box-shadow: 0 0 25px rgba(255, 62, 0, 0.45);
+      }
+
+      .btn-ki-primary:hover {
+        color: #000;
+        background: linear-gradient(90deg, var(--ki-gold), #ffffff);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 0 30px rgba(255, 208, 0, 0.8);
+      }
+
+      .btn-ki-outline {
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text-light);
+        border: 1px solid rgba(255, 153, 0, 0.6);
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0.85rem 2rem;
+        clip-path: polygon(8% 0, 100% 0, 92% 100%, 0% 100%);
+        transition: all 0.25s ease;
+      }
+
+      .btn-ki-outline:hover {
+        background: rgba(255, 62, 0, 0.2);
+        color: var(--ki-gold);
+        border-color: var(--ki-gold);
+        transform: translateY(-3px);
+        box-shadow: 0 0 20px rgba(255, 62, 0, 0.35);
+      }
+
+      /* ==================== ZYZZ QUOTE BANNER ==================== */
+      .zyzz-banner {
+        background: linear-gradient(135deg, rgba(255, 62, 0, 0.2) 0%, rgba(14, 16, 21, 0.96) 55%, rgba(255, 208, 0, 0.15) 100%);
+        border: 1px solid rgba(255, 153, 0, 0.4);
+        border-left: 6px solid var(--ki-crimson);
+        border-right: 6px solid var(--ki-gold);
+        clip-path: polygon(2% 0, 100% 0, 98% 100%, 0% 100%);
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.75);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* ==================== BADASS TACTICAL CARDS ==================== */
+      .cyber-card {
+        background: linear-gradient(160deg, var(--bg-panel) 0%, var(--bg-panel-alt) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 3px solid var(--ki-crimson);
+        position: relative;
+        clip-path: polygon(0 0, 95% 0, 100% 18px, 100% 100%, 5% 100%, 0 calc(100% - 18px));
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .cyber-card:hover {
+        transform: translateY(-7px);
+        border-color: rgba(255, 208, 0, 0.45);
+        border-top-color: var(--ki-gold);
+        box-shadow: 0 18px 40px rgba(255, 62, 0, 0.22);
+      }
+
+      .cyber-icon {
+        width: 60px;
+        height: 60px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        background: rgba(255, 62, 0, 0.14);
+        border: 1px solid rgba(255, 62, 0, 0.5);
+        color: var(--ki-gold);
+        clip-path: polygon(18% 0, 100% 0, 100% 82%, 82% 100%, 0 100%, 0 18%);
+        box-shadow: 0 0 18px rgba(255, 62, 0, 0.25);
+      }
+
+      /* Section Headers */
+      .section-header-wrap {
+        margin-bottom: 3.5rem;
+      }
+
+      .section-kicker {
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        color: var(--ki-crimson);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        display: block;
+      }
+
+      .section-heading {
+        font-size: clamp(2.5rem, 5vw, 3.8rem);
+        margin-bottom: 0;
+        position: relative;
+        display: inline-block;
+      }
+
+      .section-heading::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 4px;
+        margin: 6px auto 0;
+        background: linear-gradient(90deg, var(--ki-crimson), var(--ki-gold));
+        box-shadow: 0 0 12px var(--ki-crimson);
+      }
+
+      /* Power Bars */
+      .power-bar-track {
+        height: 14px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 2px;
+        clip-path: polygon(2% 0, 100% 0, 98% 100%, 0% 100%);
+      }
+
+      .power-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--ki-crimson), var(--ki-orange), var(--ki-gold));
+        box-shadow: 0 0 15px rgba(255, 153, 0, 0.8);
+        position: relative;
+      }
+
+      /* Copy Toast */
+      #copyToast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 1080;
+        display: none;
+        background: #0e1015;
+        border: 2px solid var(--ki-gold);
+        box-shadow: 0 0 25px rgba(255, 208, 0, 0.45);
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Animated Background Ki-Energy Particles Canvas -->
+    <canvas id="kiCanvas"></canvas>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top py-3">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#hero">
+          JORDAN <span>LOUIS</span>
+        </a>
+        <button class="navbar-toggler border-warning" type="button" data-bs-toggle="collapse" data-bs-target="#portfolioNavbar" aria-controls="portfolioNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="portfolioNavbar">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-lg-3 align-items-lg-center">
+            <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#goals">Goals</a></li>
+            <li class="nav-item"><a class="nav-link" href="#achievements">Milestones</a></li>
+            <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-ki-primary py-2 px-3 fs-6" href="#contact">
+                Contact
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero">
+      <div class="container">
+        <div class="row align-items-center gy-5">
+          <!-- Left Column: Bio & Call to Action -->
+          <div class="col-lg-7 text-center text-lg-start order-2 order-lg-1">
+            <div class="scouter-tag mb-3">
+              <span>"FUTURE QUINTILLIONAIRE"</span>
+            </div>
+
+            <h1 class="hero-title fw-bold mb-3">
+              JORDAN <span class="text-ki-gradient">LOUIS</span>
+            </h1>
+
+            <p class="lead text-light opacity-75 mb-4 fs-4">
+              I love the gym and I’m looking forward to making myself better every day. Focused on building physical strength, mental resilience, and long-term success.
+            </p>
+
+            <!-- Highlights -->
+            <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3 mb-4 hud-font small">
+              <div class="px-3 py-2 bg-dark border border-secondary text-warning">
+                <i class="bi bi-lightning-charge-fill me-1"></i> FOCUS: GYM &amp; SELF-IMPROVEMENT
+              </div>
+              <div class="px-3 py-2 bg-dark border border-secondary text-warning">
+                <i class="bi bi-tv me-1"></i> FAVORITE SERIES: DRAGON BALL FRANCHISE
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3">
+              <a href="#goals" class="btn btn-ki-primary">
+                View Goals
+              </a>
+              <a href="#contact" class="btn btn-ki-outline">
+                Get In Touch
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Hero Portrait Container -->
+          <div class="col-lg-5 text-center order-1 order-lg-2">
+            <div class="position-relative d-inline-block">
+              <div class="portrait-hud-frame">
+                <div class="portrait-inner">
+                  <!-- PUT YOUR OWN PICTURE INSIDE THE src="" ATTRIBUTE BELOW -->
+                  <img src="" alt="Jordan Louis" class="img-fluid hero-portrait">
+                </div>
+              </div>
+              <div class="scouter-overlay-badge">
+                JORDAN LOUIS
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ZYZZ QUOTE BANNER ==================== -->
+    <section class="py-3">
+      <div class="container">
+        <div class="zyzz-banner p-4 p-md-5 text-center">
+          <span class="hud-font text-warning small d-block mb-1">
+            PERSONAL MOTTO
+          </span>
+          <blockquote class="mb-2">
+            <p class="display-font display-4 fw-bold text-white mb-0">
+              "WE'RE ALL GONNA MAKE IT, BRAH"
+            </p>
+          </blockquote>
+          <div class="hud-font text-ki-gradient fs-5 fw-bold">
+            — ZYZZ
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ABOUT ME & HOBBIES ==================== -->
+    <section id="about" class="py-5">
+      <div class="container py-4">
+        <div class="text-center section-header-wrap">
+          <span class="section-kicker">// PROFILE</span>
+          <h2 class="section-heading">ABOUT ME &amp; INTERESTS</h2>
+        </div>
+
+        <!-- Core Identity Highlight Cards -->
+        <div class="row g-4 align-items-stretch mb-5">
+          <div class="col-lg-7">
+            <div class="cyber-card p-4 p-md-5 h-100 d-flex flex-column justify-content-center">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="cyber-icon">
+                  <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <div>
+                  <span class="hud-font text-warning small">PASSION</span>
+                  <h3 class="h2 mb-0">DEDICATED TO THE GYM</h3>
+                </div>
+              </div>
+              <p class="text-light opacity-75 fs-5 mb-0">
+                Excited about training and committed to consistent self-improvement. Showing up at the gym every week is about discipline, pushing past limits, and building a stronger body and mindset.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="cyber-card p-4 p-md-5 h-100 d-flex flex-column justify-content-center">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="cyber-icon">
+                  <i class="bi bi-tv-fill"></i>
+                </div>
+                <div>
+                  <span class="hud-font text-warning small">FAVORITE SHOW</span>
+                  <h3 class="h2 mb-0">ENTERTAINMENT</h3>
+                </div>
+              </div>
+              <div class="p-3 bg-dark border-start border-4 border-warning mb-2">
+                <div class="display-font fs-2 text-warning lh-1">THE DRAGON BALL FRANCHISE</div>
+              </div>
+              <p class="text-light opacity-75 mb-0">
+                My favorite series—known for its iconic themes of relentless training, perseverance, and breaking through limits.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hobbies -->
+        <div class="text-center mb-4">
+          <h3 class="h2 text-warning">HOBBIES</h3>
+        </div>
+
+        <div class="row g-4">
+          <!-- Hobby 1: Gym -->
+          <div class="col-md-4">
+            <div class="cyber-card p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="cyber-icon"><i class="bi bi-activity"></i></div>
+                <span class="badge bg-dark border border-warning text-warning hud-font">TRAINING</span>
+              </div>
+              <h4 class="display-font fs-2 mb-2">GOING TO THE GYM</h4>
+              <p class="text-light opacity-75 mb-0">
+                Strength training, staying active, and putting in the work to build a stronger physique.
+              </p>
+            </div>
+          </div>
+
+          <!-- Hobby 2: Playing Games -->
+          <div class="col-md-4">
+            <div class="cyber-card p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="cyber-icon"><i class="bi bi-controller"></i></div>
+                <span class="badge bg-dark border border-warning text-warning hud-font">GAMING</span>
+              </div>
+              <h4 class="display-font fs-2 mb-2">PLAYING GAMES</h4>
+              <p class="text-light opacity-75 mb-0">
+                Unwinding with competitive and action games during downtime.
+              </p>
+            </div>
+          </div>
+
+          <!-- Hobby 3: Sleeping -->
+          <div class="col-md-4">
+            <div class="cyber-card p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="cyber-icon"><i class="bi bi-moon-stars-fill"></i></div>
+                <span class="badge bg-dark border border-warning text-warning hud-font">REST</span>
+              </div>
+              <h4 class="display-font fs-2 mb-2">SLEEPING</h4>
+              <p class="text-light opacity-75 mb-0">
+                Prioritizing quality rest and recovery to stay sharp and support physical growth.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== GOALS ==================== -->
+    <section id="goals" class="py-5">
+      <div class="container py-4">
+        <div class="text-center section-header-wrap">
+          <span class="section-kicker">// DIRECTION</span>
+          <h2 class="section-heading">GOALS &amp; AMBITION</h2>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+          <!-- Short Term Goals -->
+          <div class="col-md-6">
+            <div class="cyber-card p-4 p-md-5 h-100">
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <span class="scouter-tag">SHORT-TERM</span>
+                <i class="bi bi-crosshair2 fs-2 text-warning"></i>
+              </div>
+              <h3 class="display-5 mb-4">IMMEDIATE FOCUS</h3>
+
+              <div class="p-3 bg-dark border border-secondary mb-3 d-flex align-items-center gap-3">
+                <i class="bi bi-shield-check text-warning fs-3"></i>
+                <div>
+                  <div class="hud-font text-warning small">MINDSET</div>
+                  <div class="fs-5 fw-bold">Become Mentally Stronger</div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-dark border border-secondary d-flex align-items-center gap-3">
+                <i class="bi bi-lightning-fill text-warning fs-3"></i>
+                <div>
+                  <div class="hud-font text-warning small">PHYSICAL</div>
+                  <div class="fs-5 fw-bold">Get Jacked</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Long Term Goals -->
+          <div class="col-md-6">
+            <div class="cyber-card p-4 p-md-5 h-100">
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <span class="scouter-tag">LONG-TERM</span>
+                <i class="bi bi-trophy-fill fs-2 text-warning"></i>
+              </div>
+              <h3 class="display-5 mb-4">FUTURE VISION</h3>
+
+              <div class="p-3 bg-dark border border-secondary mb-3 d-flex align-items-center gap-3">
+                <i class="bi bi-graph-up-arrow text-warning fs-3"></i>
+                <div>
+                  <div class="hud-font text-warning small">AMBITION</div>
+                  <div class="fs-5 fw-bold">Succeed in Life</div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-dark border border-secondary d-flex align-items-center gap-3">
+                <i class="bi bi-award-fill text-warning fs-3"></i>
+                <div>
+                  <div class="hud-font text-warning small">FAMILY</div>
+                  <div class="fs-5 fw-bold">Make My Parents Proud</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PROJECTS & ACHIEVEMENTS ==================== -->
+    <section id="achievements" class="py-5">
+      <div class="container py-4">
+        <div class="text-center section-header-wrap">
+          <span class="section-kicker">// EDUCATION</span>
+          <h2 class="section-heading">PROJECTS &amp; ACHIEVEMENTS</h2>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+          <!-- Achievement 1 -->
+          <div class="col-md-6">
+            <div class="cyber-card p-4 p-md-5 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="badge bg-dark border border-warning text-warning hud-font px-3 py-2">
+                  <i class="bi bi-mortarboard-fill me-1"></i>COMPLETED
+                </span>
+                <span class="hud-font text-secondary">MILESTONE 01</span>
+              </div>
+              <h3 class="h2 mb-2">GRADUATED PRESCHOOL</h3>
+              <p class="text-light opacity-75 mb-0">
+                Completed early childhood education and built the foundation for my academic path.
+              </p>
+            </div>
+          </div>
+
+          <!-- Achievement 2 -->
+          <div class="col-md-6">
+            <div class="cyber-card p-4 p-md-5 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="badge bg-dark border border-warning text-warning hud-font px-3 py-2">
+                  <i class="bi bi-mortarboard-fill me-1"></i>COMPLETED
+                </span>
+                <span class="hud-font text-secondary">MILESTONE 02</span>
+              </div>
+              <h3 class="h2 mb-2">GRADUATED PRIMARY SCHOOL</h3>
+              <p class="text-light opacity-75 mb-0">
+                Successfully graduated from primary school and advanced to the next stage of my education.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SKILLS & LANGUAGES ==================== -->
+    <section id="skills" class="py-5">
+      <div class="container py-4">
+        <div class="text-center section-header-wrap">
+          <span class="section-kicker">// CAPABILITIES</span>
+          <h2 class="section-heading">SKILLS &amp; LANGUAGES</h2>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+          <!-- Skills -->
+          <div class="col-lg-6">
+            <div class="cyber-card p-4 p-md-5 h-100">
+              <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="cyber-icon">
+                  <i class="bi bi-chat-quote-fill"></i>
+                </div>
+                <div>
+                  <span class="hud-font text-warning small">PERSONAL STRENGTH</span>
+                  <h3 class="h2 mb-0">SKILLS</h3>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fs-5 fw-bold">Good Jokes &amp; Humor</span>
+                  <span class="hud-font text-warning fw-bold">100%</span>
+                </div>
+                <div class="power-bar-track mb-3">
+                  <div class="power-bar-fill" style="width: 100%;"></div>
+                </div>
+                <p class="text-light opacity-75 mb-0">
+                  Great sense of humor and timing—able to crack good jokes and keep conversations light and engaging.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Languages Spoken -->
+          <div class="col-lg-6">
+            <div class="cyber-card p-4 p-md-5 h-100">
+              <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="cyber-icon">
+                  <i class="bi bi-translate"></i>
+                </div>
+                <div>
+                  <span class="hud-font text-warning small">COMMUNICATION</span>
+                  <h3 class="h2 mb-0">LANGUAGES SPOKEN</h3>
+                </div>
+              </div>
+
+              <!-- Indonesian -->
+              <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fs-5 fw-bold">Indonesian</span>
+                  <span class="badge bg-warning text-dark hud-font">NATIVE</span>
+                </div>
+                <div class="power-bar-track">
+                  <div class="power-bar-fill" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <!-- English -->
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fs-5 fw-bold">English</span>
+                  <span class="badge bg-warning text-dark hud-font">FLUENT</span>
+                </div>
+                <div class="power-bar-track">
+                  <div class="power-bar-fill" style="width: 95%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACT & SOCIALS ==================== -->
+    <section id="contact" class="py-5">
+      <div class="container py-4">
+        <div class="row justify-content-center">
+          <div class="col-lg-9">
+            <div class="cyber-card p-4 p-md-5 text-center">
+              <span class="section-kicker mb-1">// GET IN TOUCH</span>
+              <h2 class="display-4 fw-bold mb-3">CONTACT &amp; SOCIALS</h2>
+              <p class="text-light opacity-75 fs-5 mb-4 mx-auto" style="max-width: 580px;">
+                Feel free to reach out directly via email.
+              </p>
+
+              <!-- Email Display Box -->
+              <div class="p-3 px-md-4 bg-dark border border-warning d-inline-flex flex-wrap align-items-center justify-content-center gap-3 mb-4">
+                <i class="bi bi-envelope-at-fill text-warning fs-4"></i>
+                <span id="emailText" class="fs-5 fw-bold text-white text-break">
+                  jordan.louis@harapanprestasi.sch.id
+                </span>
+              </div>
+
+              <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="mailto:jordan.louis@harapanprestasi.sch.id" class="btn btn-ki-primary">
+                  <i class="bi bi-envelope-fill me-2"></i>Send Email
+                </a>
+                <button type="button" id="copyEmailBtn" class="btn btn-ki-outline">
+                  <i class="bi bi-clipboard-check me-2"></i>Copy Email
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="py-4 border-top border-secondary border-opacity-25 text-center">
+      <div class="container">
+        <div class="display-font fs-3 text-white mb-1">
+          JORDAN <span class="text-ki-gradient">LOUIS</span>
+        </div>
+        <p class="hud-font text-secondary small mb-0">
+          &copy; JORDAN LOUIS &bull; "FUTURE QUINTILLIONAIRE"
+        </p>
+      </div>
+    </footer>
+
+    <!-- Copy Notification Toast -->
+    <div id="copyToast" class="px-4 py-3">
+      <div class="d-flex align-items-center gap-3 text-white hud-font fw-bold">
+        <i class="bi bi-check-circle-fill text-warning fs-4"></i>
+        <span>EMAIL COPIED TO CLIPBOARD</span>
+      </div>
+    </div>
+
+    <!-- Option 1: Bootstrap Bundle with Popper (Starter Template 5.0.2) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- Interactive Scripts: Clipboard Copy + Rising Ki Energy Particle Canvas -->
+    <script>
+      // 1. One-Click Email Copy with Custom Toast
+      document.getElementById('copyEmailBtn').addEventListener('click', function () {
+        const email = 'jordan.louis@harapanprestasi.sch.id';
+        const tempInput = document.createElement('textarea');
+        tempInput.value = email;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+
+        const toast = document.getElementById('copyToast');
+        toast.style.display = 'block';
+        setTimeout(function () {
+          toast.style.display = 'none';
+        }, 2600);
+      });
+
+      // 2. Rising Ki-Energy Sparks Canvas Animation
+      (function () {
+        const canvas = document.getElementById('kiCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const colors = ['#ff3e00', '#ff9900', '#ffd000', '#ffffff'];
+
+        function createParticle() {
+          return {
+            x: Math.random() * canvas.width,
+            y: canvas.height + Math.random() * 100,
+            size: Math.random() * 2.8 + 0.8,
+            speedY: Math.random() * 1.4 + 0.4,
+            driftX: (Math.random() - 0.5) * 0.6,
+            alpha: Math.random() * 0.65 + 0.15,
+            color: colors[Math.floor(Math.random() * colors.length)]
+          };
+        }
+
+        for (let i = 0; i < 55; i++) {
+          const p = createParticle();
+          p.y = Math.random() * canvas.height;
+          particles.push(p);
+        }
+
+        function animateParticles() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            p.y -= p.speedY;
+            p.x += p.driftX;
+
+            if (p.y < -10) {
+              particles[i] = createParticle();
+            }
+
+            ctx.save();
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = p.color;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+
+          requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = function () {
+          animateParticles();
+        };
+      })();
+    </script>
+  </body>
+</html>
